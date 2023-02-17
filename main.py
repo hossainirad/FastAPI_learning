@@ -8,6 +8,10 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/hello/{name}")
+@app.get("/hello/{name}/")
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
+
+@app.post("/hello/{username}/")
+async def say_hello(username: str):
+    return {"message": f"Hello post {username}"}
