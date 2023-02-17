@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from models import Person
 
 app = FastAPI()
 
@@ -12,6 +13,12 @@ async def root():
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
 
-@app.post("/hello/{username}/")
-async def say_hello(username: str):
-    return {"message": f"Hello post {username}"}
+
+@app.get("/query-parameter/")
+async def say_anathor_hello(username: str = None):
+    return {"message": f"Hello query parameter {username}"}
+
+
+@app.post("/first-post/")
+async def say_post(req: Person):
+    return req
