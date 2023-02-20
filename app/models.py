@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from app.db_config import Base
 
@@ -25,3 +25,7 @@ class Item(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="items")
+
+    @hybrid_property
+    def email(self):
+        return self.owner.email
