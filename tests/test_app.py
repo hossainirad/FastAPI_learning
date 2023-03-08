@@ -1,27 +1,54 @@
 import os
+
 from httpx import AsyncClient
-from starlette.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+
+from app import crud, models
 from main import api
 
-client = TestClient(api)
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+models.Base.metadata.create_all(bind=engine)
 
 
-async def test_upload_file():
+def test_create_user(client, db: Session):
+    user_data = {"email": "example@test.com", "password": "secret_password"}
+    response = client.post("/users/", json=user_data)
+    assert response.status_code == 200
+    assert response.json()["email"] == user_data["email"]
+    # Check that user was actually saved to database
+    db_user = crud.get_user_by_email(db, email=user_data["email"])
+    assert db_user is not None
+    assert db_user.email == user_data["email"]
+    db.close()
+
+
+def test_create_duplicate_user(client):
+    user_data = {"email": "example@test.com", "password": "secret_password"}
+    response = client.post("/users/", json=user_data)
+    assert response.status_code == 400
+
+
+def test_read_users(client):
+    response = client.get("/users/")
+    assert response.status_code == 200
+    assert len(response.json()) > 0
+
+
+async def test_upload_file(client):
     # create a temporary file to use for testing
     filename = "test.mp4"
     with open(filename, "wb") as f:
         f.write(b"test")
 
-    # send a POST request to the file upload endpoint
-    # with AsyncClient(app=api, base_url="http://localhost") as client:
-    #     response = await client.post("/upload/video-upload/", files={"file": (filename, open(filename, "rb"))})
-
-
-    async with AsyncClient(app=api, base_url="http://localhost") as client:
-        with open(filename, "rb") as file:
-            response = await client.post("/upload/video-upload/", files={"video": (filename, file)})
-
-
+    with open(filename, "rb") as file:
+        response = client.post("/upload/video-upload/", files={"video": (filename, file)})
 
     # check that the response is successful
     assert response.status_code == 200
@@ -34,4 +61,4 @@ async def test_upload_file():
 
     # delete the temporary file
     os.remove(filename)
-
+    os.remove(response_data["filepath"])
