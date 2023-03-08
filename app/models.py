@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import relationship
 
 from app.db_config import Base
 
@@ -29,3 +29,14 @@ class Item(Base):
     @hybrid_property
     def email(self):
         return self.owner.email
+
+
+# define the video model
+class Video(Base):
+    __tablename__ = "videos"
+
+    id = Column(Integer, primary_key=True, index=True)
+    filename = Column(String, index=True)
+    filepath = Column(String, index=True)
+    filesize = Column(Integer, index=True)
+
