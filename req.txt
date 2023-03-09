@@ -1,5 +1,15 @@
+anyio
+aiofiles==23.1.0
 alembic==1.9.4
+httpx==0.23.3
 fastapi==0.91.0
 pydantic==1.10.4
+python-multipart==0.0.6
+pytest==7.2.2
+pytest-asyncio
+pytest-tornasync
+pytest-trio
+pytest-twisted
 SQLAlchemy==2.0.4
+twisted
 uvicorn==0.20.0
