@@ -5,11 +5,6 @@ from starlette.staticfiles import StaticFiles
 
 from routers import user, item, home, video_upload, chat
 
-if __name__ == '__main__':
-    uvicorn.run('config:api', host='0.0.0.0', port=8000, reload=True)
-
-
-
 
 def configure():
     configure_routing()
@@ -26,6 +21,6 @@ def configure_routing():
 
 if __name__ == '__main__':
     configure()
-    uvicorn.run(api)
+    uvicorn.run(api, host='0.0.0.0', port=8000, reload=True)
 else:
     configure()

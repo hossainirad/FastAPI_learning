@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat</title>
-<!--    <script src="./socket.io.js" defer></script>-->
+    <title>Group Chat</title>
     <script src="http://localhost:8000/static/socket.io.js"></script>
-
-
 </head>
 <body>
 <div>
@@ -19,7 +16,7 @@
 </div>
 
 <script>
-    const socket = io('ws://localhost:8000/ws/chat');
+    const socket = io('ws://127.0.0.1:8000/ws/group');
 
     const chatBox = document.getElementById('chat-box');
     const messageInput = document.getElementById('message-input');
@@ -36,19 +33,13 @@
     });
 
     socket.on('new_message', (message) => {
-        console.log('Connected to server!');
         console.log('New message:', message);
-        addMessageToChatBox(message.text);
+        addMessageToChatBox(message);
     });
 
     socket.on('disconnect', () => {
         console.log('Disconnected from server!');
     });
-
-    // socket.on('new_message', (message) => {
-    //     console.log('New message:', message);
-    //     addMessageToChatBox(message);
-    // });
 
     sendButton.addEventListener('click', (event) => {
         event.preventDefault();

@@ -5,7 +5,7 @@ from fastapi import File, UploadFile
 
 from app.db_config import SessionLocal
 from app.models import Video
-from app.utils import save_upload_file
+from app.chat_managers import save_upload_file
 
 router = fastapi.APIRouter()
 
