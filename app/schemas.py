@@ -34,3 +34,9 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class AuthUser(BaseModel):
+    username: str
+    email: str | None = None
+    full_name: str | None = None
