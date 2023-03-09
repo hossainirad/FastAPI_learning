@@ -1,14 +1,14 @@
-import fastapi
+from config import api
 import uvicorn
 from starlette.staticfiles import StaticFiles
 
 
-from routers import user, item, home, video_upload
+from routers import user, item, home, video_upload, chat
 
 if __name__ == '__main__':
-    uvicorn.run('config:app', host='0.0.0.0', port=8000, reload=True)
+    uvicorn.run('config:api', host='0.0.0.0', port=8000, reload=True)
 
-api = fastapi.FastAPI()
+
 
 
 def configure():
@@ -21,6 +21,7 @@ def configure_routing():
     api.include_router(user.router)
     api.include_router(item.router)
     api.include_router(video_upload.router)
+    api.include_router(chat.router)
 
 
 if __name__ == '__main__':
